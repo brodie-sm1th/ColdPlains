@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var nav_agent = $NavigationAgent3D
 var SPEED = 3.0
+var can_move = false
 const JUMP_VELOCITY = 4.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -21,4 +22,5 @@ func _physics_process(delta):
 
 	velocity = new_veloicty
 	
-	move_and_slide()
+	if can_move:
+		move_and_slide()
