@@ -8,7 +8,7 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @export var enemy_raycast : RayCast3D
 
-var health = 3
+var health = 100
 
 const SPEED = 10.0
 const JUMP_VELOCITY = 10.0
@@ -100,13 +100,13 @@ func play_shoot_effects():
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func receive_damage(amount):
-	health -= amount
+func receive_damage():
+	health -= 10
+	health_changed.emit(health)
 	if health <= 0:
 		get_tree().change_scene_to_file("res://scenes/lose.tscn")
 		#health = 3
 		#position = Vector3.ZERO
-	#health_changed.emit(health)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
