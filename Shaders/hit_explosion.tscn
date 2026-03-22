@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://dxkyjy2ynynjd"]
+
+[ext_resource type="Script" uid="uid://djp6al8it1fw2" path="res://Shaders/hit_explosion.gd" id="1_iopyt"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8ucgc"]
+lifetime_randomness = 0.25
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -40, 0)
+collision_mode = 1
+collision_friction = 0.04
+collision_bounce = 0.5
+collision_use_scale = true
+
+[sub_resource type="Curve" id="Curve_7g084"]
+_data = [Vector2(0, 0.82022476), 0.0, 0.0, 0, 0, Vector2(0.5449735, 0.6516854), -0.72395283, -0.72395283, 0, 0, Vector2(1, 0), -1.9865899, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bbpi3"]
+albedo_color = Color(1, 0.81960785, 0.54901963, 1)
+rim_enabled = true
+rim_tint = 1.0
+use_particle_trails = true
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_vc7pd"]
+material = SubResource("StandardMaterial3D_bbpi3")
+radius = 0.03
+radial_steps = 3
+sections = 2
+curve = SubResource("Curve_7g084")
+
+[sub_resource type="Curve" id="Curve_qqii3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.6305732, 0.516854), -0.9748671, -0.9748671, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7g084"]
+texture_mode = 1
+curve = SubResource("Curve_qqii3")
+
+[sub_resource type="Curve" id="Curve_1l0a4"]
+_data = [Vector2(0, 0.10112369), 0.0, 1.3104331, 0, 0, Vector2(0.15286626, 0.7191012), 2.3520603, 2.3520603, 0, 0, Vector2(1, 1), 0.04581922, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_5dpqm"]
+curve = SubResource("Curve_1l0a4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k2m5w"]
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.099999994
+scale_curve = SubResource("CurveTexture_5dpqm")
+alpha_curve = SubResource("CurveTexture_7g084")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.5
+collision_use_scale = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pa28w"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.8509804, 0.7411765, 0.44705883, 0.8039216)
+emission_enabled = true
+emission = Color(0.9218172, 0.4409571, 5.7756904e-07, 1)
+emission_energy_multiplier = 16.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_5je0v"]
+material = SubResource("StandardMaterial3D_pa28w")
+size = Vector2(0.03, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_iopyt"]
+radius = 0.031
+
+[node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("impact", "explosion")]
+script = ExtResource("1_iopyt")
+impact = NodePath("Rotation/Impact")
+explosion = NodePath("Rotation/Explosion")
+
+[node name="Timer" type="Timer" parent="." unique_id=2147192100]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="Rotation" type="Node3D" parent="." unique_id=1621546663]
+transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 0, 0)
+
+[node name="Impact" type="GPUParticles3D" parent="Rotation" unique_id=990440894]
+emitting = false
+amount = 3
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+trail_enabled = true
+trail_lifetime = 0.09
+process_material = SubResource("ParticleProcessMaterial_8ucgc")
+draw_pass_1 = SubResource("TubeTrailMesh_vc7pd")
+
+[node name="Explosion" type="GPUParticles3D" parent="Rotation" unique_id=307703224]
+emitting = false
+amount = 10
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+trail_lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_k2m5w")
+draw_pass_1 = SubResource("QuadMesh_5je0v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation" unique_id=846183033]
+visible = false
+mesh = SubResource("CapsuleMesh_iopyt")
+skeleton = NodePath("../..")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

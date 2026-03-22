@@ -166,6 +166,13 @@ navigation_mesh = SubResource("NavigationMesh_rmptm")
 
 [node name="Environment" parent="NavigationRegion3D" unique_id=332111882 instance=ExtResource("2_fr3vy")]
 
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1882605272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4154243, 1.3917305, 0)
+use_collision = true
+radius = 1.401
+radial_segments = 86
+rings = 46
+
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
