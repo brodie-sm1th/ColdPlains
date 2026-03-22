@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b42h8yghroxxh"]
+
+[ext_resource type="PackedScene" uid="uid://bgj4anlpp5oq4" path="res://models/toy_gun.glb" id="1_f83sm"]
+
+[node name="Toygun" type="Node3D" unique_id=1322711870]
+
+[node name="model" type="Node3D" parent="." unique_id=889740191]
+
+[node name="Sketchfab_Scene" parent="model" unique_id=1261384375 instance=ExtResource("1_f83sm")]
+transform = Transform3D(0.0003516361, 0, 0, 0, 0.00052700914, 0, 0, 0, 0.00072762213, 0, 0, 0)

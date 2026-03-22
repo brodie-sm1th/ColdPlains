@@ -4,10 +4,9 @@ signal health_changed(health_value)
 
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
-@onready var pistol = $Camera3D/Weapon_management/Pistol
-@onready var toygun = $Camera3D/Weapon_management/ToyGun
-@onready var muzzle_flash = $Camera3D/Weapon_management/Pistol/MuzzleFlash
-@onready var raycast = $Camera3D/Weapon_management/RayCast3D
+@onready var pistol = $Camera3D/Hand/Weapon_management/Pistol
+@onready var muzzle_flash = $Camera3D/Hand/Weapon_management/Pistol/MuzzleFlash
+@onready var raycast = $Camera3D/Hand/Weapon_management/RayCast3D
 @onready var flashlight = $Camera3D/Hand/SpotLight3D
 @export var enemy_raycast : RayCast3D
 @export var walk_speed: float = 5.0
@@ -32,7 +31,6 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	
-	toygun.hide()
 	pistol.hide()
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -52,11 +50,13 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("shoot") \
 			and anim_player.current_animation != "shoot":
 		play_shoot_effects.rpc()
-		if raycast.is_colliding():
-			if is_in_group("enemy"): 
-				print("I hit an enemy")
-				var hit_player = raycast.get_collider()
-				hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
+		
+		
+		#if raycast.is_colliding():
+			#if is_in_group("enemy"): 
+				#print("I hit an enemy")
+				#var hit_player = raycast.get_collider()
+				#hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 		if enemy_raycast.is_colliding():
 			enemy_raycast.get_collider().damage_taken += 1 #replace with signals later
 
@@ -71,12 +71,8 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
-	if Input.is_action_just_pressed("swap_to_toy_gun"):
-		pistol.hide() #changes the visibility of the weapon though it hasn't stopped its functionality
-		toygun.show() #makes it visible
-		current_weapon = toygun #A variable in order to swap between functionality of the weapons
+
 	if Input.is_action_just_pressed("swap_to_pistol"):
-		toygun.hide() 
 		pistol.show()
 		current_weapon = pistol
 	
@@ -127,7 +123,7 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-func weapon_management():
+func switch_weapons():
 	pass
 
 func _on_animation_player_animation_finished(anim_name):
