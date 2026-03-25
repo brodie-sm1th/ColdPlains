@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dxkyjy2ynynjd"]
 
 [ext_resource type="Script" uid="uid://djp6al8it1fw2" path="res://Shaders/hit_explosion.gd" id="1_iopyt"]
+[ext_resource type="Texture2D" uid="uid://dt1qnhy04kdte" path="res://assets/images/bullet_hole_concrete.png" id="2_nwvuf"]
 
 [sub_resource type="Gradient" id="Gradient_iopyt"]
 offsets = PackedFloat32Array(0.33587787, 1)
@@ -190,7 +191,6 @@ curve = SubResource("Curve_qq1jc")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iopyt"]
 lifetime_randomness = 0.75
 direction = Vector3(0, 1, 0)
-spread = 90.0
 initial_velocity_min = 0.099999994
 initial_velocity_max = 0.29999998
 gravity = Vector3(0, 0.5, 0)
@@ -220,9 +220,10 @@ rings = 3
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_iopyt"]
 radius = 0.031
 
-[node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("smoke_timer", "impact", "explosion", "sphere", "smoke")]
+[node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("smoke_timer", "hole", "impact", "explosion", "sphere", "smoke")]
 script = ExtResource("1_iopyt")
 smoke_timer = NodePath("SmokeTimer")
+hole = NodePath("Rotation/Hole")
 impact = NodePath("Rotation/Impact")
 explosion = NodePath("Rotation/Explosion")
 sphere = NodePath("Rotation/Sphere")
@@ -276,6 +277,10 @@ lifetime = 4.0
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_iopyt")
 draw_pass_1 = SubResource("SphereMesh_huduw")
+
+[node name="Hole" type="Decal" parent="Rotation" unique_id=1766357118]
+size = Vector3(1, 0.66, 0.66)
+texture_albedo = ExtResource("2_nwvuf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation" unique_id=846183033]
 visible = false
