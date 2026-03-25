@@ -14,11 +14,11 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="MultiplayerFPSTemplate"
+config/name="ColdPlain"
 config/tags=PackedStringArray("multiplayer")
 run/main_scene="res://scenes/testWorld.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="uid://el1jrwdua5i0"
+config/icon="/home/qianwentan/Downloads/B9ZGEqTvNi3vEQLiaFwsiS.png"
 
 [dotnet]
 
@@ -27,6 +27,10 @@ project/assembly_name="MultiplayerFPSTemplate"
 [filesystem]
 
 import/blender/enabled=false
+
+[global_group]
+
+ui=""
 
 [input]
 

@@ -7,6 +7,7 @@ signal health_changed(health_value)
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var flashlight = $Camera3D/Hand/SpotLight3D
+@onready var health_bar = $CanvasLayer/HUD/HealthBar
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
 @export var walk_speed: float = 5.0
@@ -18,6 +19,8 @@ var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
+var is_dead: bool = false
+#var player_id: int 
 
 var health = 100
 var damage = 10
@@ -33,6 +36,9 @@ func _enter_tree():
 	print(name)
 	set_multiplayer_authority(str(name).to_int())
 
+func _on_health_changed(health_value):\
+	health_bar.value = health_value 
+
 func _ready():
 	if not is_multiplayer_authority(): return
 	
@@ -43,7 +49,8 @@ func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_input(event):
-	if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority() or is_dead: 
+		return
 	
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .005)
@@ -51,7 +58,8 @@ func _unhandled_input(event):
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
 	if Input.is_action_just_pressed("shoot") \
-			and anim_player.current_animation != "shoot":
+			and anim_player.current_animation != "shoot" \
+			and not is_dead:
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
@@ -67,7 +75,8 @@ func _unhandled_input(event):
 
 
 func _physics_process(delta):
-	if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority() or is_dead: 
+		return
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -142,9 +151,30 @@ func play_shoot_effects():
 
 @rpc("any_peer")
 func receive_damage():
+	if is_dead:
+		return
+
 	health -= damage
+	if is_multiplayer_authority():
+		if health_bar:
+			health_bar.value = health
 	health_changed.emit(health)
+	
 	if health <= 0:
-		get_tree().change_scene_to_file("res://scenes/lose.tscn")
+		die()
+		#get_tree().change_scene_to_file("res://scenes/lose.tscn")
 		#health = 3
 		#position = Vector3.ZERO
+
+@rpc("any_peer")
+func die():
+	if is_dead:
+		return
+	is_dead = true
+	velocity = Vector3.ZERO
+	set_process(false)
+	set_physics_process(false)
+	visible = false
+	$CollisionShape3D.disabled = true
+	if is_multiplayer_authority():
+		get_tree().call_group("ui","show_lose_screen")

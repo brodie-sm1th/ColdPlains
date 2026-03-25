@@ -5,7 +5,6 @@ extends Node
 @onready var hud = $CanvasLayer/HUD
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 
-
 @onready var Player = preload("res://scenes/player.tscn")
 #@onready var Player = $Player
 var tracked = false
@@ -86,3 +85,4 @@ func remove_player(peer_id):
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
+	
