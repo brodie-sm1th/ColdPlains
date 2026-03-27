@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dxkyjy2ynynjd"]
 
 [ext_resource type="Script" uid="uid://djp6al8it1fw2" path="res://Shaders/hit_explosion.gd" id="1_iopyt"]
+[ext_resource type="Texture2D" uid="uid://dt1qnhy04kdte" path="res://assets/images/bullet_hole_concrete.png" id="2_nwvuf"]
 
 [sub_resource type="Gradient" id="Gradient_iopyt"]
 offsets = PackedFloat32Array(0.33587787, 1)
@@ -190,14 +191,13 @@ curve = SubResource("Curve_qq1jc")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iopyt"]
 lifetime_randomness = 0.75
 direction = Vector3(0, 1, 0)
-spread = 90.0
 initial_velocity_min = 0.099999994
 initial_velocity_max = 0.29999998
 gravity = Vector3(0, 0.5, 0)
 damping_min = 0.5
 damping_max = 0.5
-scale_min = 0.049999997
-scale_max = 0.25
+scale_min = 0.02
+scale_max = 0.14999999
 scale_curve = SubResource("CurveTexture_yljsu")
 color = Color(1, 1, 1, 0.16862746)
 alpha_curve = SubResource("CurveTexture_0e4bj")
@@ -209,6 +209,7 @@ shading_mode = 2
 diffuse_mode = 3
 specular_mode = 2
 vertex_color_use_as_albedo = true
+albedo_color = Color(0.57700837, 0.5770084, 0.57700837, 1)
 grow_amount = -7.033
 stencil_flags = 2
 
@@ -217,12 +218,10 @@ material = SubResource("StandardMaterial3D_nwvuf")
 radial_segments = 6
 rings = 3
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_iopyt"]
-radius = 0.031
-
-[node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("smoke_timer", "impact", "explosion", "sphere", "smoke")]
+[node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("smoke_timer", "hole", "impact", "explosion", "sphere", "smoke")]
 script = ExtResource("1_iopyt")
 smoke_timer = NodePath("SmokeTimer")
+hole = NodePath("Rotation/Hole")
 impact = NodePath("Rotation/Impact")
 explosion = NodePath("Rotation/Explosion")
 sphere = NodePath("Rotation/Sphere")
@@ -277,10 +276,9 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_iopyt")
 draw_pass_1 = SubResource("SphereMesh_huduw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation" unique_id=846183033]
-visible = false
-mesh = SubResource("CapsuleMesh_iopyt")
-skeleton = NodePath("../..")
+[node name="Hole" type="Decal" parent="Rotation" unique_id=1766357118]
+size = Vector3(1, 0.66, 0.66)
+texture_albedo = ExtResource("2_nwvuf")
 
 [connection signal="timeout" from="DeleteTimer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="SmokeTimer" to="." method="_on_smoke_timer_timeout"]
