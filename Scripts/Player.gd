@@ -1,4 +1,4 @@
-eextends CharacterBody3D
+extends CharacterBody3D
 
 signal health_changed(health_value)
 
