@@ -7,6 +7,8 @@ signal health_changed(health_value)
 @onready var muzzle_flash = $Camera3D/Weapon_management/Pistol/MuzzleFlash
 @onready var pistol = $Camera3D/Weapon_management/Pistol
 @onready var toygun = $Camera3D/Weapon_management/toygun
+@onready var uzi = $Camera3D/Weapon_management/Uzi
+@onready var Uzi_muzzle_flash = $Camera3D/Weapon_management/Uzi/UMuzzleFlashw
 @onready var raycast = $Camera3D/RayCast3D
 @onready var flashlight = $Camera3D/Hand/SpotLight3D
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
@@ -44,7 +46,7 @@ func _on_health_changed(health_value):\
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	
+	uzi.hide()
 	pistol.hide()
 	toygun.hide()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -90,10 +92,18 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("swap_to_pistol"):
 		toygun.hide()
 		pistol.show()
-
+		uzi.hide()
+		var current_weapon = pistol
 	if Input.is_action_just_pressed("swap_to_toy_gun"):
 		toygun.show()
 		pistol.hide()
+		var current_weapon = toygun
+		uzi.hide()
+	if Input.is_action_just_pressed("swap_to_uzi"):
+		uzi.show()
+		pistol.hide()
+		toygun.hide()
+		var current_weapon = uzi
 
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -161,6 +171,8 @@ func play_shoot_effects():
 	anim_player.play("shoot")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
+	Uzi_muzzle_flash.restart()
+	Uzi_muzzle_flash.emitting = true
 
 @rpc("any_peer")
 func receive_damage():
