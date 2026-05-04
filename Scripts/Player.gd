@@ -3,12 +3,12 @@ extends CharacterBody3D
 signal health_changed(health_value)
 
 @onready var collision_shape = $CollisionShape3D
-@onready var camera = $Camera3D
-@onready var anim_player = $AnimationPlayer
-@onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
-@onready var raycast = $Camera3D/RayCast3D
-@onready var flashlight = $Camera3D/Hand/SpotLight3D
-@onready var health_bar = $CanvasLayer/HUD/HealthBar
+@export var camera : Camera3D
+@export var anim_player : AnimationPlayer
+@export var muzzle_flash : GPUParticles3D
+@export var raycast : RayCast3D
+@export var flashlight : SpotLight3D
+@export var health_bar : ProgressBar
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
 @export var walk_speed: float = 5.0
@@ -66,9 +66,9 @@ func _unhandled_input(event):
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
-	if (Input.is_action_just_pressed("shoot") \
-			and anim_player.current_animation != "shoot" \
-			and not is_dead) or (Input.is_action_pressed("shoot") and no_cooldown):
+	if Input.is_action_pressed("shoot") \
+			and not is_dead \
+			and (anim_player.current_animation != "shoot" or no_cooldown):
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
@@ -79,7 +79,7 @@ func _unhandled_input(event):
 			var hit_explosion = hit_explosion_scene.instantiate()
 			var pos = particle_raycast.get_collision_point()
 			var norm = particle_raycast.get_collision_normal()
-			hit_explosion.look_at_from_position(pos, norm + pos, Vector3(0, 0, 1))
+			hit_explosion.look_at_from_position(pos, norm + pos)
 			get_parent().add_child(hit_explosion)
 
 
@@ -124,8 +124,9 @@ func _physics_process(delta):
 			velocity.x = direction.x * SPEED
 			velocity.z = direction.z * SPEED
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
+			var damping_value = 10 # Number of frames before horizontal velocity is reduced to 0. Replace later with a more inclusive system
+			velocity.x = move_toward(velocity.x, 0, SPEED / damping_value * abs(velocity.normalized().x))
+			velocity.z = move_toward(velocity.z, 0, SPEED / damping_value * abs(velocity.normalized().z))
 
 	# --- New: Handle Camera Look (Right Stick) ---
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down")

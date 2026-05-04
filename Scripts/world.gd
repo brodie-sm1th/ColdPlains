@@ -28,6 +28,8 @@ func _on_host_button_pressed():
 	add_player(multiplayer.get_unique_id())
 	
 	#upnp_setup()
+
+
 func _on_join_button_pressed():
 	isHosting = false
 	main_menu.hide()
@@ -36,9 +38,12 @@ func _on_join_button_pressed():
 	enet_peer.create_client(address_entry.text, PORT)
 	multiplayer.multiplayer_peer = enet_peer
 
+
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_health_bar)
+
+
 func upnp_setup():
 	var upnp = UPNP.new()
 	
@@ -61,9 +66,11 @@ func _physics_process(delta):
 	if tracked:
 		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
+
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
+
 
 func _on_single_player_button_pressed():
 	main_menu.hide()
@@ -80,11 +87,13 @@ func add_player(peer_id):
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_health_bar)
 
+
 func remove_player(peer_id):
 	if not isHosting:
 		var player = get_node_or_null(str(peer_id))
 		if player:
 			player.queue_free()
+
 
 func update_health_bar(health_value):
 	health_bar.value = health_value

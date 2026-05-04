@@ -3,15 +3,15 @@ render_mode use_half_res_pass;
 uniform sampler2D noise;
 
 float big_noise_offset(float size, vec2 coords, vec2 offset) {
-	float bignoise = pow(texture(noise, coords*size + vec2(TIME/750.0)).x, 1.125)/0.3;
+	float bignoise = pow(texture(noise, coords*size + vec2(TIME/1500.0)).x, 1.125)/0.3;
 	return bignoise;
 }
 
 vec4 generate_clouds(vec3 eyedir, vec2 coords) {
 	float angle = coords.y;
 	float noisepos = pow(angle, 2);
-	float noisestat = pow(texture(noise, coords*3.0 - vec2(TIME/600.0)).x, 2.0);
-	float noisemob = pow(texture(noise, coords*0.3 + vec2(TIME/1000.0)).x, 0.25)/3.0 - 0.1;
+	float noisestat = pow(texture(noise, coords*3.0 - vec2(TIME/1200.0)).x, 2.0);
+	float noisemob = pow(texture(noise, coords*0.3 + vec2(TIME/2000.0)).x, 0.25)/3.0 - 0.1;
 	float skynoise = (noisestat + noisemob - 0.2 - clamp(big_noise_offset(0.03, coords, vec2(0.5, 0.8)), 0, 1)/10.0) / 1.0;
 	vec3 nebula = vec3(big_noise_offset(0.01, coords, vec2(0.5, 0.8)),  0.5, big_noise_offset(0.03, coords, vec2(0.2, 0.4)));
 	return vec4(nebula + vec3(0.5), pow(skynoise, 1.0));
@@ -32,5 +32,14 @@ void sky() {
         // At full resolution pass, blend sky and clouds together
         vec3 color = generate_sky(EYEDIR, SKY_COORDS);
         COLOR = color + HALF_RES_COLOR.rgb * HALF_RES_COLOR.a;
+		COLOR += COLOR * pow(abs(pow(SCREEN_UV.x * 2.0 - 1.0, 4.0) - 1.0), 2.0);
+		COLOR += COLOR * pow(abs(pow(SCREEN_UV.y * 2.0 - 1.0, 4.0) - 1.0), 2.0);
+		COLOR /= 2.5;
+		COLOR = clamp(COLOR, vec3(0), vec3(10)) + vec3(big_noise_offset(0.01, SKY_COORDS, vec2(0.5, 0.8)),  0.5, big_noise_offset(0.03, SKY_COORDS, vec2(0.2, 0.4))) / 1000.0;
+		COLOR += pow(COLOR * 30.0, vec3(3));
+		
     }
 }
+
+
+

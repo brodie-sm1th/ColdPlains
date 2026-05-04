@@ -48,6 +48,8 @@ point_count = 3
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bbpi3"]
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.9999998, 0.7630762, 0.38376358, 1)
+emission = Color(0.9161883, 0.46589684, 5.7756904e-07, 1)
+emission_energy_multiplier = 1000.0
 rim_enabled = true
 rim_tint = 1.0
 use_particle_trails = true
@@ -154,6 +156,8 @@ curve = SubResource("Curve_4o42d")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_edmss"]
 gravity = Vector3(0, 0, 0)
+scale_min = 0.75
+scale_max = 1.25
 scale_curve = SubResource("CurveTexture_edmss")
 color = Color(1, 1, 1, 0.019607844)
 color_ramp = SubResource("GradientTexture1D_prg7t")
@@ -218,6 +222,10 @@ material = SubResource("StandardMaterial3D_nwvuf")
 radial_segments = 6
 rings = 3
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nwvuf"]
+radius = 0.05
+height = 1.26
+
 [node name="HitExplosion" type="Node3D" unique_id=95958684 node_paths=PackedStringArray("smoke_timer", "hole", "impact", "explosion", "sphere", "smoke")]
 script = ExtResource("1_iopyt")
 smoke_timer = NodePath("SmokeTimer")
@@ -238,7 +246,7 @@ one_shot = true
 autostart = true
 
 [node name="Rotation" type="Node3D" parent="." unique_id=1621546663]
-transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 
 [node name="Impact" type="GPUParticles3D" parent="Rotation" unique_id=990440894]
 emitting = false
@@ -279,6 +287,10 @@ draw_pass_1 = SubResource("SphereMesh_huduw")
 [node name="Hole" type="Decal" parent="Rotation" unique_id=1766357118]
 size = Vector3(1, 0.66, 0.66)
 texture_albedo = ExtResource("2_nwvuf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation" unique_id=2046664789]
+visible = false
+mesh = SubResource("CapsuleMesh_nwvuf")
 
 [connection signal="timeout" from="DeleteTimer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="SmokeTimer" to="." method="_on_smoke_timer_timeout"]

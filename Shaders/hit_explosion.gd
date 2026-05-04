@@ -7,6 +7,7 @@ extends Node3D
 @export var sphere : GPUParticles3D
 @export var smoke : GPUParticles3D
 
+
 func _on_timer_timeout() -> void:
 	queue_free()
 
@@ -21,9 +22,8 @@ func _ready() -> void:
 	sphere.emitting = true
 	smoke.emitting = true
 	hole.rotate_y(randf() * 2 * PI)
-	hole.rotate_x(randf_range(-1, 1) * PI / 4)
-	hole.rotate_z(randf_range(-1, 1) * PI / 4)
-
+	hole.rotate_x(randf_range(-1, 1) * PI / 6)
+	hole.rotate_z(randf_range(-1, 1) * PI / 6)
 
 
 func _process(delta: float) -> void:

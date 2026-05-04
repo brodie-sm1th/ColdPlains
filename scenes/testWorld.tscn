@@ -10,13 +10,13 @@
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_myy55"]
 noise_type = 2
-frequency = 0.2617
+frequency = 0.1
 fractal_type = 0
 cellular_distance_function = 1
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7nwna"]
-width = 720
-height = 720
+width = 2048
+height = 2048
 noise = SubResource("FastNoiseLite_myy55")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7nwna"]
@@ -31,6 +31,8 @@ background_mode = 2
 sky = SubResource("Sky_w2qqb")
 tonemap_mode = 2
 glow_enabled = true
+glow_intensity = 0.01
+glow_strength = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujyws"]
 bg_color = Color(1, 0.117647, 0, 1)
@@ -102,6 +104,7 @@ text = "Join"
 
 [node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=459800446]
 layout_mode = 2
+text = "10.177.200.117"
 placeholder_text = "Enter Address to Join Here"
 alignment = 1
 
