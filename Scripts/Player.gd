@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 signal health_changed(health_value)
 
+@onready var collision_shape = $CollisionShape3D
 @export var camera : Camera3D
 @export var anim_player : AnimationPlayer
 @export var muzzle_flash : GPUParticles3D
@@ -26,12 +27,19 @@ var is_dead: bool = false
 var health = 100
 var damage = 10
 
-const SPEED = 10.0
-const JUMP_VELOCITY = 10.0
+var SPEED = 10.0
+var JUMP_VELOCITY = 10.0
 const LOOK_SPEED = 5 # Adjust as needed for controller comfort
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = 20.0
+
+var crouch_height = 0.5
+var stand_height = 2.0
+var is_crouched = false
+var crouch_speed = 3
+var crouch_jump_velocity = 3
+const CROUCH_TRANSLATE = 0.7
 
 func _enter_tree():
 	print(name)
@@ -79,10 +87,13 @@ func _physics_process(delta):
 	if not is_multiplayer_authority() or is_dead: 
 		return
 	
+	_handle_crouch(delta)
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
+	
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
@@ -168,6 +179,21 @@ func receive_damage():
 		#health = 3
 		#position = Vector3.ZERO
 
+		
+
+func _handle_crouch(delta) -> void:
+	if is_crouched: 
+		SPEED = crouch_speed 
+		JUMP_VELOCITY = crouch_jump_velocity
+	else: 
+		SPEED = 10
+		JUMP_VELOCITY = 10
+	
+	is_crouched = Input.is_action_pressed("crouch")
+	camera.position = Vector3(0,(CROUCH_TRANSLATE if is_crouched else 1.513),0)
+	$CollisionShape3D.shape.height = stand_height - CROUCH_TRANSLATE if is_crouched else stand_height
+	$CollisionShape3D.position.y = $CollisionShape3D.shape.height / 2
+	
 @rpc("any_peer")
 func die():
 	if is_dead:
