@@ -5,6 +5,8 @@ extends Node
 @onready var hud = $CanvasLayer/HUD
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
 @onready var Player = preload("res://scenes/player.tscn")
+@onready var test_level_scene = preload("res://scenes/test_level.tscn")
+@export var main_level : NavigationRegion3D
 #@onready var Player = $Player
 var tracked = false
 var player
@@ -79,6 +81,7 @@ func _on_single_player_button_pressed():
 	add_player(multiplayer.get_unique_id())
 
 
+
 func add_player(peer_id):
 	player = Player.instantiate()
 	player.name = str(peer_id)
@@ -98,3 +101,13 @@ func remove_player(peer_id):
 func update_health_bar(health_value):
 	health_bar.value = health_value
 	
+
+
+func _on_test_level_button_pressed() -> void:
+	main_level.queue_free()
+	var level = test_level_scene.instantiate()
+	add_child(level)
+	main_menu.hide()
+	hud.show()
+	#multiplayer.multiplayer_peer = enet_peer
+	add_player(multiplayer.get_unique_id())
