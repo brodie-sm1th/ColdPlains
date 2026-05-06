@@ -25,7 +25,7 @@ var is_dead: bool = false
 #var player_id: int 
 
 var health = 100
-var damage = 10
+var damage = 3
 
 var SPEED = 10.0
 var JUMP_VELOCITY = 10.0
