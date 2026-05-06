@@ -6,6 +6,8 @@ signal health_changed(health_value)
 @onready var toygun = $Camera3D/Weapon_management/toygun
 @onready var uzi = $Camera3D/Weapon_management/Uzi
 @onready var Uzi_muzzle_flash = $Camera3D/Weapon_management/Uzi/UMuzzleFlash
+@onready var rifle = $Camera3D/Weapon_management/Rifle
+@onready var rifle_muzzle_flash = $Camera3D/Weapon_management/Rifle/RMuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var flashlight = $Camera3D/Hand/SpotLight3D
 @onready var health_bar = $CanvasLayer/HUD/HealthBar
@@ -55,7 +57,7 @@ func _on_health_changed(health_value):\
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	switch_weapons(pistol)
+	#switch_weapons(pistol)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
@@ -84,6 +86,8 @@ func _unhandled_input(event):
 			anim_player.play("uzi_shoot")
 		elif current_weapon == toygun:
 			anim_player.play("shoot")
+		elif current_weapon == rifle:
+			anim_player.play("uzi_shoot")
 			
 		play_shoot_effects.rpc() # Call the shooting effects RPC
 
@@ -159,8 +163,13 @@ func _physics_process(delta):
 		switch_weapons(toygun)
 	if Input.is_action_just_pressed("swap_to_uzi"):
 		switch_weapons(uzi)
+	if Input.is_action_just_pressed("swap_to_rifle"):
+		switch_weapons(rifle)
 
 	if is_shooting and current_weapon == uzi:
+		perform_shooting_logic()
+		
+	if is_shooting and current_weapon == rifle:
 		perform_shooting_logic()
 
 
@@ -186,7 +195,7 @@ func switch_weapons(selected_weapon):
 	pistol.hide()
 	toygun.hide()
 	uzi.hide()
-	
+	rifle.hide()
 	# Show the selected weapon
 	current_weapon = selected_weapon
 	if current_weapon:
@@ -214,6 +223,12 @@ func play_shoot_effects():
 		if Uzi_muzzle_flash:
 			Uzi_muzzle_flash.restart()
 			Uzi_muzzle_flash.emitting = true
+		else:
+			print("Rifle muzzle flash is null")
+	elif current_weapon == rifle:
+		if rifle_muzzle_flash:
+			rifle_muzzle_flash.restart()
+			rifle_muzzle_flash.emitting = true
 		else:
 			print("Uzi muzzle flash is null")
 
