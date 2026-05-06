@@ -1,14 +1,17 @@
 extends CharacterBody3D
 
 signal health_changed(health_value)
-
 @onready var collision_shape = $CollisionShape3D
-@export var camera : Camera3D
-@export var anim_player : AnimationPlayer
-@export var muzzle_flash : GPUParticles3D
-@export var raycast : RayCast3D
-@export var flashlight : SpotLight3D
-@export var health_bar : ProgressBar
+@onready var pistol = $Camera3D/Weapon_management/Pistol
+@onready var toygun = $Camera3D/Weapon_management/toygun
+@onready var uzi = $Camera3D/Weapon_management/Uzi
+@onready var Uzi_muzzle_flash = $Camera3D/Weapon_management/Uzi/UMuzzleFlash
+@onready var raycast = $Camera3D/RayCast3D
+@onready var flashlight = $Camera3D/Hand/SpotLight3D
+@onready var health_bar = $CanvasLayer/HUD/HealthBar
+@onready var camera = $Camera3D
+@onready var anim_player = $AnimationPlayer
+@onready var muzzle_flash = $Camera3D/Weapon_management/Pistol/MuzzleFlash
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
 @export var walk_speed: float = 5.0
@@ -19,6 +22,7 @@ signal health_changed(health_value)
 
 var current_weapon = null
 var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
+var is_shooting: bool = false # Checks the shooting state
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
@@ -51,7 +55,7 @@ func _on_health_changed(health_value):\
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	#switch_weapons(pistol)
+	switch_weapons(pistol)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
@@ -59,36 +63,34 @@ func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_input(event):
-	if not is_multiplayer_authority() or is_dead: 
+	if not is_multiplayer_authority() or is_dead:
 		return
-	
+
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .005)
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
-	
+
+	# Handle shooting input
 	if Input.is_action_pressed("shoot") \
 			and not is_dead \
 			and (anim_player.current_animation != "shoot" or no_cooldown):
+
+		is_shooting = true # Set the shooting flag to true
+
 		if current_weapon == pistol:
 			anim_player.play("shoot")
 		elif current_weapon == uzi:
 			anim_player.play("uzi_shoot")
 		elif current_weapon == toygun:
 			anim_player.play("shoot")
-		play_shoot_effects.rpc()
-		if raycast.is_colliding():
-			var hit_player = raycast.get_collider()
-			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
-		if enemy_raycast.is_colliding():
-			enemy_raycast.get_collider().damage_taken += damage
-		if particle_raycast.is_colliding():
-			var hit_explosion = hit_explosion_scene.instantiate()
-			var pos = particle_raycast.get_collision_point()
-			var norm = particle_raycast.get_collision_normal()
-			hit_explosion.look_at_from_position(pos, norm + pos)
-			get_parent().add_child(hit_explosion)
+			
+		play_shoot_effects.rpc() # Call the shooting effects RPC
 
+		perform_shooting_logic() # Move shooting logic into a separate function
+
+	elif Input.is_action_just_released("shoot"):
+		is_shooting = false # Reset the shooting flag when the shoot button is released
 
 
 	
@@ -158,10 +160,29 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("swap_to_uzi"):
 		switch_weapons(uzi)
 
+	if is_shooting and current_weapon == uzi:
+		perform_shooting_logic()
+
+
 	move_and_slide()
 
+func perform_shooting_logic():
+	if raycast.is_colliding():
+		var hit_player = raycast.get_collider()
+		hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
+		
+	if enemy_raycast.is_colliding():
+		enemy_raycast.get_collider().damage_taken += damage
+
+	if particle_raycast.is_colliding():
+		var hit_explosion = hit_explosion_scene.instantiate()
+		var pos = particle_raycast.get_collision_point()
+		var norm = particle_raycast.get_collision_normal()
+		hit_explosion.look_at_from_position(pos, norm + pos)
+		get_parent().add_child(hit_explosion)
+
 func switch_weapons(selected_weapon):
-	# Hide all weapons
+	#Hide all weapons
 	pistol.hide()
 	toygun.hide()
 	uzi.hide()
