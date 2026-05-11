@@ -86,6 +86,182 @@ tracks/5/keys = {
 "update": 0,
 "values": [Vector3(0, 1.5707964, 0)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Camera3D/Weapon_management/Pistol:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, -0.25, -0.5)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Camera3D/Weapon_management/Pistol:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "automatic_weapons_shoot"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/Weapon_management/Uzi:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.55820125, -0.20862663, -0.51259923), Vector3(0.55820125, -0.3407526, -0.28432202)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/Weapon_management/Uzi:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5707964, 0), Vector3(-1.2880614e-08, 1.5707964, 0.29911453)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D/Weapon_management/Rifle:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.54466105, -0.28565192, -0.6687403), Vector3(0.54466105, -0.38316894, -0.51790386)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera3D/Weapon_management/Rifle:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5707964, 0), Vector3(-8.5568495e-09, 1.5707964, 0.19703023)]
+}
+
+[sub_resource type="Animation" id="Animation_fjrip"]
+resource_name = "equip_weapon_anim"
+length = 0.71
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/Weapon_management/Uzi:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.36666667, 0.5, 0.6333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.55820125, -2.0606065, 0.12390292), Vector3(0.55820125, -1.0588971, -0.24431983), Vector3(0.55820125, -0.71156955, -0.4718891), Vector3(0.558, -0.209, -0.472), Vector3(0.558, -0.209, -0.503)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/Weapon_management/Uzi:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.33333334, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(4.33271e-08, 1.5707964, -1.7034937), Vector3(5.457167e-10, 1.5707964, -0.9313776), Vector3(-2.108565e-08, 1.5707964, -0.415563), Vector3(0, 1.5707964, 0), Vector3(0, 1.5707964, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D/Weapon_management/Pistol:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.53333336),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.5, -1.9379334, 0.031264782), Vector3(0.5, -0.6721246, -0.24555215), Vector3(0.5, -0.25, -0.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera3D/Weapon_management/Pistol:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 0.6333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-1.5895063, 0, 0), Vector3(-0.22806342, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera3D/Weapon_management/toygun:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.522, -1.8451862, -0.13832808), Vector3(0.522, -0.56411445, -0.34416404), Vector3(0.522, -0.16, -0.55)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera3D/Weapon_management/toygun:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(4.3711115e-08, -1.5707963, 1.5672708), Vector3(4.1020918e-08, -1.5707963, 1.3032973), Vector3(0, -1.5707964, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Camera3D/Weapon_management/Rifle:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.54466105, -2.5161605, -0.13151556), Vector3(0.54466105, -1.0082546, -0.3863588), Vector3(0.54466105, -0.28565192, -0.6687403)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Camera3D/Weapon_management/Rifle:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.43333334, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(4.3486843e-08, 1.5707964, -1.6722), Vector3(1.51492e-08, 1.5707964, -0.790502), Vector3(2.0778076e-08, 1.5707964, -0.64312637), Vector3(0, 1.5707964, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_knepc"]
 resource_name = "idle"
@@ -197,65 +373,14 @@ tracks/3/keys = {
 "values": [Vector3(0, -1.5707964, 0), Vector3(-3.396091e-09, -1.5707964, -0.07777187), Vector3(0, -1.5707964, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_tuyoq"]
-resource_name = "uzi_shoot"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/Weapon_management/Uzi:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0.55820125, -0.20862663, -0.51259923), Vector3(0.55820125, -0.2520417, -0.4366876)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Camera3D/Weapon_management/Uzi:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1.5707964, 0), Vector3(-1.2880614e-08, 1.5707964, 0.29911453)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Camera3D/Weapon_management/Rifle:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0.54466105, -0.28565192, -0.6687403), Vector3(0.54466105, -0.38316894, -0.51790386)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Camera3D/Weapon_management/Rifle:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1.5707964, 0), Vector3(-8.5568495e-09, 1.5707964, 0.19703023)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p6wdk"]
 _data = {
 &"RESET": SubResource("Animation_jhgv2"),
+&"automatic_weapons_shoot": SubResource("Animation_tuyoq"),
+&"equip_weapon_anim": SubResource("Animation_fjrip"),
 &"idle": SubResource("Animation_knepc"),
 &"move": SubResource("Animation_qcgne"),
-&"shoot": SubResource("Animation_efeb8"),
-&"uzi_shoot": SubResource("Animation_tuyoq")
+&"shoot": SubResource("Animation_efeb8")
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hn37q"]
@@ -326,7 +451,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51306, 0)
 [node name="Weapon_management" type="Node3D" parent="Camera3D" unique_id=1777169307]
 
 [node name="Pistol" parent="Camera3D/Weapon_management" unique_id=945160158 instance=ExtResource("2_4esil")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.25, -0.5)
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0.5, -0.25, -0.5)
 visible = false
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="Camera3D/Weapon_management/Pistol" unique_id=215553547]
@@ -344,7 +469,8 @@ transform = Transform3D(-2.1664035e-11, 0, -0.00054015644, 0, 0.00050341495, 0, 
 visible = false
 
 [node name="Uzi" parent="Camera3D/Weapon_management" unique_id=488215013 instance=ExtResource("5_tuyoq")]
-transform = Transform3D(-5.245368e-10, 0, 0.011999999, 0, 0.012000003, 0, -0.012000003, 0, -5.2453664e-10, 0.55820125, -0.20862663, -0.51259923)
+transform = Transform3D(-5.2453664e-10, 0, 0.011999998, 0, 0.012, 0, -0.012, 0, -5.245366e-10, 0.55820125, -0.20862663, -0.51259923)
+visible = false
 
 [node name="UMuzzleFlash" type="GPUParticles3D" parent="Camera3D/Weapon_management/Uzi" unique_id=1450434305]
 transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 28.753956, 2.7522964, 0.71746445)
@@ -357,8 +483,7 @@ process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
 [node name="Rifle" parent="Camera3D/Weapon_management" unique_id=1334222396 instance=ExtResource("6_fjrip")]
-transform = Transform3D(-8.742278e-11, 0, 0.002, 0, 0.002, 0, -0.002, 0, -8.742278e-11, 0.54466105, -0.28565192, -0.6687403)
-visible = false
+transform = Transform3D(-8.742279e-11, 0, 0.002, 0, 0.0020000003, 0, -0.0020000003, 0, -8.742278e-11, 0.54466105, -0.28565192, -0.6687403)
 
 [node name="RMuzzleFlash" type="GPUParticles3D" parent="Camera3D/Weapon_management/Rifle" unique_id=522729273]
 transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 476.34375, 54.921143, 0.7175293)

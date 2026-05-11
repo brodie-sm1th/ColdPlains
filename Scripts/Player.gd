@@ -83,11 +83,11 @@ func _unhandled_input(event):
 		if current_weapon == pistol:
 			anim_player.play("shoot")
 		elif current_weapon == uzi:
-			anim_player.play("uzi_shoot")
+			anim_player.play("automatic_weapons_shoot")
 		elif current_weapon == toygun:
 			anim_player.play("shoot")
 		elif current_weapon == rifle:
-			anim_player.play("uzi_shoot")
+			anim_player.play("automatic_weapons_shoot")
 			
 		play_shoot_effects.rpc() # Call the shooting effects RPC
 
