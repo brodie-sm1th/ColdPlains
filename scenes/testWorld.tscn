@@ -152,6 +152,11 @@ max_value = 3.0
 value = 3.0
 show_percentage = false
 
+[node name="HealthLabel" type="Label" parent="CanvasLayer/HUD/HealthBar" unique_id=1914952725]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
 [node name="Shaders" type="Node" parent="CanvasLayer/HUD" unique_id=1018482066]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CanvasLayer/HUD/Shaders" unique_id=1065358867]

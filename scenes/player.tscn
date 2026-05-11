@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
 [ext_resource type="PackedScene" uid="uid://cf1dcxwv6bvl3" path="res://models/Pistol.glb" id="2_4esil"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
-[ext_resource type="Script" path="res://scenes/HealthBar.gd" id="4_dqkch"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -134,6 +133,10 @@ material = SubResource("StandardMaterial3D_4smqo")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
+[sub_resource type="Theme" id="Theme_qhqgy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_qhqgy"]
+
 [node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("camera", "anim_player", "muzzle_flash", "raycast", "flashlight", "health_bar", "enemy_raycast", "particle_raycast")]
 collision_layer = 2
 collision_mask = 5
@@ -202,11 +205,27 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 15
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=462444822]
-script = ExtResource("4_dqkch")
 
 [node name="Healthbar" type="ProgressBar" parent="CanvasLayer" unique_id=1184296204]
-offset_right = 4.0
-offset_bottom = 27.0
+anchors_preset = -1
+anchor_right = 0.003
+anchor_bottom = 0.021000002
+offset_left = 425.0
+offset_top = 615.0
+offset_right = 731.544
+offset_bottom = 628.392
+theme = SubResource("Theme_qhqgy")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.46140027, 0.96768457, 0, 1)
+theme_override_font_sizes/font_size = 15
 value = 100.0
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/Healthbar" unique_id=1843108662]
+layout_mode = 0
+offset_left = 423.0
+offset_top = 425.0
+offset_right = 463.0
+offset_bottom = 448.0
+label_settings = SubResource("LabelSettings_qhqgy")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

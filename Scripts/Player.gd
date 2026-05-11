@@ -205,5 +205,6 @@ func die():
 	$MeshInstance3D.hide()
 	print("hide")
 	$CollisionShape3D.disabled = true
+	
 	if is_multiplayer_authority():
 		get_tree().call_group("ui","show_lose_screen")
