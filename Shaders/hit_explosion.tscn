@@ -127,8 +127,8 @@ material = SubResource("StandardMaterial3D_pa28w")
 size = Vector2(0.02, 1)
 
 [sub_resource type="Curve" id="Curve_prg7t"]
-_data = [Vector2(0, 1), 0.0, -1.8997405, 0, 0, Vector2(1, 0), -0.04983177, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 1), 0.0, -1.8997405, 0, 0, Vector2(0.12738855, 0.3820225), -1.932049, -1.932049, 0, 0, Vector2(0.36942673, 0.11235964), -0.58801544, -0.58801544, 0, 0, Vector2(1, 0), -0.04983177, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="CurveTexture" id="CurveTexture_4o42d"]
 curve = SubResource("Curve_prg7t")

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_hbot1"]
 [ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://scenes/enemy.tscn" id="3_nule3"]
 [ext_resource type="Shader" uid="uid://d4b1lwb78qlx0" path="res://Shaders/pixelation.gdshader" id="4_rucky"]
-[ext_resource type="PackedScene" path="res://scenes/Test_environment.tscn" id="5_rucky"]
+[ext_resource type="PackedScene" uid="uid://cvnpwobudpc3m" path="res://scenes/Test_environment.tscn" id="5_rucky"]
 [ext_resource type="PackedScene" uid="uid://t2uyuire0yg1" path="res://scenes/lose.tscn" id="7_rucky"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_myy55"]
@@ -43,6 +43,8 @@ bg_color = Color(0.00392157, 1, 0, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rucky"]
 shader = ExtResource("4_rucky")
 shader_parameter/pixel_size = 2
+shader_parameter/screen_ratio = Vector2i(16, 9)
+shader_parameter/screen_size = 20
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0ddhe"]
 vertices = PackedVector3Array(-0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5)

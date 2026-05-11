@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
 [ext_resource type="PackedScene" uid="uid://cf1dcxwv6bvl3" path="res://models/Pistol.glb" id="2_4esil"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
-[ext_resource type="Script" uid="uid://ct2an3bn1btbv" path="res://Scripts/HealthBar.gd" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://bgj4anlpp5oq4" path="res://models/toy_gun.glb" id="4_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://d4jwmgrgu53l6" path="res://models/low-poly_imi_uzi.glb" id="5_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://3tk255sadi0p" path="res://models/low-poly_akm.glb" id="6_fjrip"]
+[ext_resource type="Script" path="res://scenes/HealthBar.gd" id="4_dqkch"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -429,6 +429,7 @@ collision_mask = 5
 script = ExtResource("1_2v3wm")
 enemy_raycast = NodePath("Camera3D/EnemyRayCast3D")
 particle_raycast = NodePath("Camera3D/ParticleRayCast")
+no_cooldown = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
