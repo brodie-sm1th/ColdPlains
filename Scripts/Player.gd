@@ -8,7 +8,6 @@ signal health_changed(health_value)
 @export var muzzle_flash : GPUParticles3D
 @export var raycast : RayCast3D
 @export var flashlight : Node3D
-@export var health_bar : ProgressBar
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
 @export var walk_speed: float = 5.0
@@ -24,7 +23,7 @@ var slide_timer: float = 0.0
 var is_dead: bool = false
 #var player_id: int 
 
-var health = 3
+var health = 100
 var damage = 3
 
 var SPEED = 10.0
@@ -45,15 +44,20 @@ func _enter_tree():
 	print(name)
 	set_multiplayer_authority(str(name).to_int())
 
-func _on_health_changed(health_value):\
-	health_bar.value = health_value 
-
 func _ready():
 	if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
+	if not is_multiplayer_authority(): return
+	
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = true
+	
+	# Hide health bar UI for other players
+	$CanvasLayer.visible = true
+
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
@@ -167,24 +171,16 @@ func play_shoot_effects():
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func receive_damage():
 	if is_dead:
 		return
 
 	health -= damage
-	if is_multiplayer_authority():
-		if health_bar:
-			health_bar.value = health
 	health_changed.emit(health)
 	
 	if health <= 0:
 		rpc("die")
-		#get_tree().change_scene_to_file("res://scenes/lose.tscn")
-		#health = 3
-		#position = Vector3.ZERO
-
-		
 
 func _handle_crouch(delta) -> void:
 	if is_crouched: 
