@@ -25,6 +25,7 @@ signal health_changed(health_value)
 var current_weapon = null
 var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
 var is_shooting: bool = false # Checks the shooting state
+var can_shoot: bool = true
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
@@ -74,27 +75,31 @@ func _unhandled_input(event):
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
 	# Handle shooting input
-	if Input.is_action_pressed("shoot") \
-			and not is_dead \
-			and (anim_player.current_animation != "shoot" or no_cooldown):
-
-		is_shooting = true # Set the shooting flag to true
-
-		if current_weapon == pistol:
-			anim_player.play("shoot")
-		elif current_weapon == uzi:
+	# Single-shot weapons (pistol, toygun) fire on just_pressed.
+	# Automatic weapons (uzi, rifle) fire while held.
+	if Input.is_action_just_pressed("shoot"):
+		is_shooting = true
+		if current_weapon == uzi or current_weapon == rifle:
 			anim_player.play("automatic_weapons_shoot")
-		elif current_weapon == toygun:
-			anim_player.play("shoot")
-		elif current_weapon == rifle:
-			anim_player.play("automatic_weapons_shoot")
-			
-		play_shoot_effects.rpc() # Call the shooting effects RPC
+			play_shoot_effects.rpc()
+			perform_shooting_logic()
+		else:
+			# pistol / toygun: fire once per press and wait for animation to finish
+			if (can_shoot or no_cooldown) and (anim_player.current_animation != "shoot" or no_cooldown):
+				anim_player.play("shoot")
+				can_shoot = false
+				play_shoot_effects.rpc()
+				perform_shooting_logic()
 
-		perform_shooting_logic() # Move shooting logic into a separate function
+	elif Input.is_action_pressed("shoot") and is_shooting and (current_weapon == uzi or current_weapon == rifle):
+		# continue automatic fire while held
+		if anim_player.current_animation != "automatic_weapons_shoot":
+			anim_player.play("automatic_weapons_shoot")
+		play_shoot_effects.rpc()
+		perform_shooting_logic()
 
 	elif Input.is_action_just_released("shoot"):
-		is_shooting = false # Reset the shooting flag when the shoot button is released
+		is_shooting = false
 
 
 	
@@ -203,6 +208,7 @@ func switch_weapons(selected_weapon):
 		
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
+		can_shoot = true
 		anim_player.play("idle")
 
 func start_slide(direction: Vector3) -> void:
