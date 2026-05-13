@@ -75,24 +75,24 @@ func _unhandled_input(event):
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
 	# Handle shooting input
-	# Single-shot weapons (pistol, toygun) fire on just_pressed.
-	# Automatic weapons (uzi, rifle) fire while held.
 	if Input.is_action_just_pressed("shoot"):
 		is_shooting = true
 		if current_weapon == uzi or current_weapon == rifle:
 			anim_player.play("automatic_weapons_shoot")
 			play_shoot_effects.rpc()
 			perform_shooting_logic()
-		else:
-			# pistol / toygun: fire once per press and wait for animation to finish
-			if (can_shoot or no_cooldown) and (anim_player.current_animation != "shoot" or no_cooldown):
+		else:  # pistol or toygun
+			# Enforcing the shooting animation waiting mechanism
+			if can_shoot or no_cooldown:
+				can_shoot = false  # Set this to false to prevent immediate re-shot
 				anim_player.play("shoot")
-				can_shoot = false
 				play_shoot_effects.rpc()
 				perform_shooting_logic()
+			else:
+				print("Cannot shoot yet; waiting for animation to finish.")
 
 	elif Input.is_action_pressed("shoot") and is_shooting and (current_weapon == uzi or current_weapon == rifle):
-		# continue automatic fire while held
+		# Continue automatic fire while held
 		if anim_player.current_animation != "automatic_weapons_shoot":
 			anim_player.play("automatic_weapons_shoot")
 		play_shoot_effects.rpc()
@@ -116,7 +116,15 @@ func _physics_process(delta):
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-		
+	
+	# Adjust this segment to avoid switching to idle if shooting
+	if anim_player.current_animation == "shoot":
+		pass  # Don’t change state when shooting
+	elif Input.get_vector("left", "right", "up", "down") != Vector2.ZERO and is_on_floor():
+		anim_player.play("move")
+	else:
+		anim_player.play("idle")
+
 	#Toggle Flashlight 
 	if Input.is_action_just_pressed("toggle_flashlight"):
 		flashlight.visible = not flashlight.visible
@@ -207,9 +215,13 @@ func switch_weapons(selected_weapon):
 		current_weapon.show()
 		
 func _on_animation_player_animation_finished(anim_name):
+	print("Animation finished: ", anim_name)  # Check this is called for the "shoot" animation
 	if anim_name == "shoot":
-		can_shoot = true
-		anim_player.play("idle")
+		can_shoot = true  # Allow shooting again only when shoot animation finishes
+		anim_player.play("idle")  # Transition to idle after shooting
+
+
+
 
 func start_slide(direction: Vector3) -> void:
 	is_sliding = true
