@@ -31,7 +31,7 @@ var slide_timer: float = 0.0
 var is_dead: bool = false
 #var player_id: int 
 
-var health = 100
+var health = 3
 var damage = 3
 
 var SPEED = 10.0
@@ -246,7 +246,7 @@ func receive_damage():
 	health_changed.emit(health)
 	
 	if health <= 0:
-		die()
+		rpc("die")
 		#get_tree().change_scene_to_file("res://scenes/lose.tscn")
 		#health = 3
 		#position = Vector3.ZERO
@@ -265,8 +265,9 @@ func _handle_crouch(delta) -> void:
 	camera.position = Vector3(0,(CROUCH_TRANSLATE if is_crouched else 1.513),0)
 	$CollisionShape3D.shape.height = stand_height - CROUCH_TRANSLATE if is_crouched else stand_height
 	$CollisionShape3D.position.y = $CollisionShape3D.shape.height / 2
-	
-@rpc("any_peer")
+
+
+@rpc("authority", "call_local")
 func die():
 	if is_dead:
 		return
@@ -274,8 +275,6 @@ func die():
 	set_process(false)
 	set_physics_process(false)
 	hide()
-	$MeshInstance3D.hide()
-	print("hide")
 	$CollisionShape3D.disabled = true
 	if is_multiplayer_authority():
 		get_tree().call_group("ui","show_lose_screen")
