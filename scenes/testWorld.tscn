@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://8ka2ui7sq36p" path="res://addons/kenney_particle_pack/circle_05.png" id="3_hbot1"]
 [ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://scenes/enemy.tscn" id="3_nule3"]
 [ext_resource type="Shader" uid="uid://d4b1lwb78qlx0" path="res://Shaders/pixelation.gdshader" id="4_rucky"]
+[ext_resource type="Shader" uid="uid://bxknks8pnlto5" path="res://Shaders/quantization.gdshader" id="5_0ddhe"]
 [ext_resource type="PackedScene" uid="uid://cvnpwobudpc3m" path="res://scenes/Test_environment.tscn" id="5_rucky"]
 [ext_resource type="PackedScene" uid="uid://t2uyuire0yg1" path="res://scenes/lose.tscn" id="7_rucky"]
 
@@ -33,6 +34,8 @@ tonemap_mode = 2
 glow_enabled = true
 glow_intensity = 0.01
 glow_strength = 2.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.001
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujyws"]
 bg_color = Color(1, 0.117647, 0, 1)
@@ -42,9 +45,15 @@ bg_color = Color(0.00392157, 1, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rucky"]
 shader = ExtResource("4_rucky")
-shader_parameter/pixel_size = 2
 shader_parameter/screen_ratio = Vector2i(16, 9)
 shader_parameter/screen_size = 20
+shader_parameter/ratio = 0.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwfgy"]
+shader = ExtResource("5_0ddhe")
+shader_parameter/levels = 6.0
+shader_parameter/colamt = 7.0
+shader_parameter/ratio = 0.4
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0ddhe"]
 vertices = PackedVector3Array(-0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5)
@@ -56,7 +65,9 @@ main_level = NodePath("NavigationRegion3D")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1539882701]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_energy = 0.0
 shadow_enabled = true
+shadow_blur = 6.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1553380858]
 environment = SubResource("Environment_6knbf")
@@ -154,11 +165,22 @@ show_percentage = false
 
 [node name="Shaders" type="Node" parent="CanvasLayer/HUD" unique_id=1018482066]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="CanvasLayer/HUD/Shaders" unique_id=1065358867]
+[node name="Pixelation" type="CanvasLayer" parent="CanvasLayer/HUD/Shaders" unique_id=1065358867]
 layer = 0
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/HUD/Shaders/CanvasLayer" unique_id=1800395306]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/HUD/Shaders/Pixelation" unique_id=1800395306]
 material = SubResource("ShaderMaterial_rucky")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CanvasLayer/HUD/Shaders" unique_id=2104843488]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/HUD/Shaders/CanvasLayer" unique_id=439815265]
+material = SubResource("ShaderMaterial_lwfgy")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

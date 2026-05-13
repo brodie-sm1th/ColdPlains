@@ -7,7 +7,7 @@ signal health_changed(health_value)
 @export var anim_player : AnimationPlayer
 @export var muzzle_flash : GPUParticles3D
 @export var raycast : RayCast3D
-@export var flashlight : SpotLight3D
+@export var flashlight : Node3D
 @export var health_bar : ProgressBar
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
@@ -81,6 +81,11 @@ func _unhandled_input(event):
 			var norm = particle_raycast.get_collision_normal()
 			hit_explosion.look_at_from_position(pos, norm + pos)
 			get_parent().add_child(hit_explosion)
+	
+	if Input.is_action_just_pressed("capture_toggle") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif Input.is_action_just_pressed("capture_toggle"):
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _physics_process(delta):
@@ -95,8 +100,8 @@ func _physics_process(delta):
 
 	
 	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_pressed("ui_accept") and is_on_floor():
+		velocity += JUMP_VELOCITY * get_floor_normal()
 		
 	#Toggle Flashlight 
 	if Input.is_action_just_pressed("toggle_flashlight"):

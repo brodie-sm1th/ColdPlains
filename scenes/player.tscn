@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
 [ext_resource type="PackedScene" uid="uid://cf1dcxwv6bvl3" path="res://models/Pistol.glb" id="2_4esil"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
-[ext_resource type="Script" path="res://scenes/HealthBar.gd" id="4_dqkch"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -142,11 +141,10 @@ camera = NodePath("Camera3D")
 anim_player = NodePath("AnimationPlayer")
 muzzle_flash = NodePath("Camera3D/Pistol/MuzzleFlash")
 raycast = NodePath("Camera3D/RayCast3D")
-flashlight = NodePath("Camera3D/Hand/SpotLight3D")
+flashlight = NodePath("Camera3D/Pistol/Hand/Flashlight")
 health_bar = NodePath("CanvasLayer/Healthbar")
 enemy_raycast = NodePath("Camera3D/EnemyRayCast3D")
 particle_raycast = NodePath("Camera3D/ParticleRayCast")
-no_cooldown = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -180,14 +178,32 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
-[node name="Hand" type="Node3D" parent="Camera3D" unique_id=1826501949]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.51306, 0)
+[node name="Hand" type="Node3D" parent="Camera3D/Pistol" unique_id=1826501949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -1.26306, 0.5)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D/Hand" unique_id=2029540740]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1907651, 0)
+[node name="Flashlight" type="Node3D" parent="Camera3D/Pistol/Hand" unique_id=34318359]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54521567, 1.2140862, -0.7501054)
+
+[node name="LightWide" type="SpotLight3D" parent="Camera3D/Pistol/Hand/Flashlight" unique_id=2029540740]
+light_color = Color(0.34509805, 0.627451, 1, 1)
+light_energy = 1.4
+light_specular = 2.0
 shadow_enabled = true
-spot_range = 9.259
-spot_angle = 16.67
+shadow_blur = 10.0
+spot_range = 40.0
+spot_attenuation = 0.75
+spot_angle = 50.0
+spot_angle_attenuation = 3.0
+
+[node name="LightNarrow" type="SpotLight3D" parent="Camera3D/Pistol/Hand/Flashlight" unique_id=1284004865]
+light_color = Color(0.7882353, 0.654902, 1, 1)
+light_energy = 2.0
+light_specular = 4.0
+shadow_enabled = true
+shadow_blur = 6.0
+spot_range = 100.0
+spot_angle = 20.0
+spot_angle_attenuation = 0.85
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1804038237]
 target_position = Vector3(0, 0, -50)
@@ -202,7 +218,6 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 15
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=462444822]
-script = ExtResource("4_dqkch")
 
 [node name="Healthbar" type="ProgressBar" parent="CanvasLayer" unique_id=1184296204]
 offset_right = 4.0
