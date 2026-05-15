@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bgj4anlpp5oq4" path="res://models/toy_gun.glb" id="4_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://d4jwmgrgu53l6" path="res://models/low-poly_imi_uzi.glb" id="5_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://3tk255sadi0p" path="res://models/low-poly_akm.glb" id="6_fjrip"]
+[ext_resource type="Script" uid="uid://dttc7xtknpv0r" path="res://scenes/HealthBar.gd" id="4_dqkch"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -643,6 +644,7 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 15
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=462444822]
+script = ExtResource("4_dqkch")
 
 [node name="HealthLabel" type="ProgressBar" parent="CanvasLayer" unique_id=1184296204]
 anchors_preset = -1
