@@ -3,6 +3,12 @@ extends CharacterBody3D
 signal health_changed(health_value)
 
 @onready var collision_shape = $CollisionShape3D
+@onready var pistol = $Camera3D/Weapon_management/Pistol
+@onready var toygun = $Camera3D/Weapon_management/toygun
+@onready var uzi = $Camera3D/Weapon_management/Uzi
+@onready var Uzi_muzzle_flash = $Camera3D/Weapon_management/Uzi/UMuzzleFlash
+@onready var rifle = $Camera3D/Weapon_management/Rifle
+@onready var rifle_muzzle_flash = $Camera3D/Weapon_management/Rifle/RMuzzleFlash
 @export var camera : Camera3D
 @export var anim_player : AnimationPlayer
 @export var muzzle_flash : GPUParticles3D
@@ -16,7 +22,10 @@ signal health_changed(health_value)
 @export var slide_friction: float = 0.95
 @export var no_cooldown = false
 
+var current_weapon = null
 var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
+var is_shooting: bool = false # Checks the shooting state
+var can_shoot: bool = true
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
@@ -55,36 +64,43 @@ func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_input(event):
-	if not is_multiplayer_authority() or is_dead: 
+	if not is_multiplayer_authority() or is_dead:
 		return
-	
+
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .005)
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
-	
-	if Input.is_action_pressed("shoot") \
-			and not is_dead \
-			and (anim_player.current_animation != "shoot" or no_cooldown):
+
+	# Handle shooting input
+	if Input.is_action_just_pressed("shoot"):
+		is_shooting = true
+		if current_weapon == uzi or current_weapon == rifle:
+			anim_player.play("automatic_weapons_shoot")
+			play_shoot_effects.rpc()
+			perform_shooting_logic()
+		else:  # pistol or toygun
+			# Enforcing the shooting animation waiting mechanism
+			if can_shoot or no_cooldown:
+				can_shoot = false  # Set this to false to prevent immediate re-shot
+				anim_player.play("shoot")
+				play_shoot_effects.rpc()
+				perform_shooting_logic()
+			else:
+				print("Cannot shoot yet; waiting for animation to finish.")
+
+	elif Input.is_action_pressed("shoot") and is_shooting and (current_weapon == uzi or current_weapon == rifle):
+		# Continue automatic fire while held
+		if anim_player.current_animation != "automatic_weapons_shoot":
+			anim_player.play("automatic_weapons_shoot")
 		play_shoot_effects.rpc()
-		if raycast.is_colliding():
-			var hit_player = raycast.get_collider()
-			hit_player.receive_damage.rpc()
-		if enemy_raycast.is_colliding():
-			enemy_raycast.get_collider().damage_taken += damage
-		if particle_raycast.is_colliding():
-			var hit_explosion = hit_explosion_scene.instantiate()
-			var pos = particle_raycast.get_collision_point()
-			var norm = particle_raycast.get_collision_normal()
-			hit_explosion.look_at_from_position(pos, norm + pos)
-			get_parent().add_child(hit_explosion)
+		perform_shooting_logic()
+
+	elif Input.is_action_just_released("shoot"):
+		is_shooting = false
+
+
 	
-	if Input.is_action_just_pressed("capture_toggle") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	elif Input.is_action_just_pressed("capture_toggle"):
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-
 func _physics_process(delta):
 	if not is_multiplayer_authority() or is_dead: 
 		return
@@ -93,7 +109,6 @@ func _physics_process(delta):
 	
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-
 	if Input.is_action_pressed("ui_accept") and is_on_floor():
 		velocity += JUMP_VELOCITY * get_floor_normal()
 		
@@ -136,12 +151,62 @@ func _physics_process(delta):
 		anim_player.play("move")
 	else:
 		anim_player.play("idle")
+	
+	if Input.is_action_just_pressed("swap_to_pistol"):
+		switch_weapons(pistol)
+	if Input.is_action_just_pressed("swap_to_toy_gun"):
+		switch_weapons(toygun)
+	if Input.is_action_just_pressed("swap_to_uzi"):
+		switch_weapons(uzi)
+	if Input.is_action_just_pressed("swap_to_rifle"):
+		switch_weapons(rifle)
+
+	if is_shooting and current_weapon == uzi:
+		perform_shooting_logic()
+		
+	if is_shooting and current_weapon == rifle:
+		perform_shooting_logic()
+
 
 	move_and_slide()
 
+func perform_shooting_logic():
+	if raycast.is_colliding():
+		var hit_player = raycast.get_collider()
+		hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
+		
+
+		if raycast.is_colliding():
+			var hit_player = raycast.get_collider()
+			hit_player.receive_damage.rpc()
+		if enemy_raycast.is_colliding():
+			enemy_raycast.get_collider().damage_taken += damage
+		if particle_raycast.is_colliding():
+			var hit_explosion = hit_explosion_scene.instantiate()
+			var pos = particle_raycast.get_collision_point()
+			var norm = particle_raycast.get_collision_normal()
+			hit_explosion.look_at_from_position(pos, norm + pos)
+			get_parent().add_child(hit_explosion)
+
+func switch_weapons(selected_weapon):
+	#Hide all weapons
+	pistol.hide()
+	toygun.hide()
+	uzi.hide()
+	rifle.hide()
+	# Show the selected weapon
+	current_weapon = selected_weapon
+	if current_weapon:
+		current_weapon.show()
+		
 func _on_animation_player_animation_finished(anim_name):
+	print("Animation finished: ", anim_name)  # Check this is called for the "shoot" animation
 	if anim_name == "shoot":
-		anim_player.play("idle")
+		can_shoot = true  # Allow shooting again only when shoot animation finishes
+		anim_player.play("idle")  # Transition to idle after shooting
+
+
+
 
 func start_slide(direction: Vector3) -> void:
 	is_sliding = true
@@ -151,10 +216,26 @@ func start_slide(direction: Vector3) -> void:
 
 @rpc("call_local")
 func play_shoot_effects():
-	anim_player.stop()
-	anim_player.play("shoot")
-	muzzle_flash.restart()
-	muzzle_flash.emitting = true
+	if current_weapon == pistol:
+		if muzzle_flash:
+			muzzle_flash.restart()
+			muzzle_flash.emitting = true
+		else:
+			print("Muzzle flash for pistol is null")
+	elif current_weapon == uzi:
+		if Uzi_muzzle_flash:
+			Uzi_muzzle_flash.restart()
+			Uzi_muzzle_flash.emitting = true
+		else:
+			print("Rifle muzzle flash is null")
+	elif current_weapon == rifle:
+		if rifle_muzzle_flash:
+			rifle_muzzle_flash.restart()
+			rifle_muzzle_flash.emitting = true
+		else:
+			print("Uzi muzzle flash is null")
+
+
 
 @rpc("any_peer", "call_local")
 func receive_damage():
