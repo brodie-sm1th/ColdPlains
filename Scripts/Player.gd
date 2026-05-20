@@ -16,6 +16,7 @@ signal health_changed(health_value)
 @export var flashlight : Node3D
 @export var enemy_raycast : RayCast3D
 @export var particle_raycast : RayCast3D
+
 @export var walk_speed: float = 5.0
 @export var slide_speed: float = 20.0
 @export var slide_duration: float = 0.5
@@ -186,6 +187,7 @@ func perform_shooting_logic():
 		var pos = particle_raycast.get_collision_point()
 		var norm = particle_raycast.get_collision_normal()
 		hit_explosion.look_at_from_position(pos, norm + pos)
+		hit_explosion.setup_particles(damage) #damage for this function should be replaced with damage from the current weapon
 		get_parent().add_child(hit_explosion)
 
 func switch_weapons(selected_weapon):
