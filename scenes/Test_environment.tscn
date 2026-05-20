@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://dn22jysuvbbdf" path="res://assets/images/istockphoto-1390352280-612x612.jpg" id="1_xoo1l"]
 [ext_resource type="Texture2D" uid="uid://oh5anap6dnot" path="res://assets/images/istockphoto-1390352280-612x612_specular(1).png" id="2_8t0ot"]
 [ext_resource type="PackedScene" path="res://scenes/Walls.tscn" id="3_whntf"]
+[ext_resource type="PackedScene" uid="uid://qv7ayncd6sh2" path="res://Models/Decrations/rocks_tall.tscn" id="4_w881m"]
+[ext_resource type="PackedScene" uid="uid://dbhnhwkj771dv" path="res://Models/Decrations/rocks.tscn" id="5_w6vqs"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_1nidv"]
 size = Vector2(140, 140)
@@ -101,3 +103,12 @@ draw_pass_1 = SubResource("SphereMesh_whntf")
 
 [node name="Wall" parent="." unique_id=1786420037 instance=ExtResource("3_whntf")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 1.8321915, 0.013955414, 0.20969868)
+
+[node name="Rocks2" parent="." unique_id=471023016 instance=ExtResource("4_w881m")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -23.869059, -9.536743e-07, 33.352676)
+
+[node name="Rocks3" parent="." unique_id=750338050 instance=ExtResource("4_w881m")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -37.969673, -9.536743e-07, 7.2539806)
+
+[node name="Rocks" parent="." unique_id=1905639283 instance=ExtResource("5_w6vqs")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 2.7438216, 0, 32.65251)
