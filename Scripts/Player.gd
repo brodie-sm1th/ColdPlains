@@ -205,9 +205,6 @@ func _on_animation_player_animation_finished(anim_name):
 		can_shoot = true  # Allow shooting again only when shoot animation finishes
 		anim_player.play("idle")  # Transition to idle after shooting
 
-
-
-
 func start_slide(direction: Vector3) -> void:
 	is_sliding = true
 	slide_timer = 0.0
@@ -243,12 +240,10 @@ func receive_damage():
 	if is_dead:
 		print("Player is already dead, ignoring damage")
 		return
-
 	health -= damage
 	print("Health reduced to:", health)
 	health_changed.emit(health)
 	print("health_changed signal emitted with value:", health)
-	
 	if health <= 0:
 		print("Player dead, calling die()")
 		is_dead = true
@@ -267,16 +262,13 @@ func _handle_crouch(delta) -> void:
 	$CollisionShape3D.shape.height = stand_height - CROUCH_TRANSLATE if is_crouched else stand_height
 	$CollisionShape3D.position.y = $CollisionShape3D.shape.height / 2
 
-
 @rpc("authority", "call_local")
 func die():
-	if is_dead:
-		return
+	#if is_dead:
+		#return
 	velocity = Vector3.ZERO
 	set_process(false)
 	set_physics_process(false)
 	hide()
-	$CollisionShape3D.disabled = true
-	
 	if is_multiplayer_authority():
 		get_tree().call_group("ui","show_lose_screen")
