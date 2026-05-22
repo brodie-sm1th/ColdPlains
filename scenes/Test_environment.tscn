@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dn22jysuvbbdf" path="res://assets/images/istockphoto-1390352280-612x612.jpg" id="1_xoo1l"]
 [ext_resource type="Texture2D" uid="uid://oh5anap6dnot" path="res://assets/images/istockphoto-1390352280-612x612_specular(1).png" id="2_8t0ot"]
-[ext_resource type="PackedScene" path="res://scenes/Walls.tscn" id="3_whntf"]
+[ext_resource type="PackedScene" uid="uid://dxb7bg1p06wa8" path="res://scenes/Walls.tscn" id="3_whntf"]
 [ext_resource type="PackedScene" uid="uid://qv7ayncd6sh2" path="res://Models/Decrations/rocks_tall.tscn" id="4_w881m"]
 [ext_resource type="PackedScene" uid="uid://dbhnhwkj771dv" path="res://Models/Decrations/rocks.tscn" id="5_w6vqs"]
 
@@ -12,6 +12,7 @@ size = Vector2(140, 140)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8t0ot"]
 albedo_texture = ExtResource("1_xoo1l")
 normal_enabled = true
+normal_scale = 0.64
 normal_texture = ExtResource("2_8t0ot")
 uv1_scale = Vector3(0.1, 0.1, 0.1)
 uv1_triplanar = true
@@ -98,6 +99,7 @@ omni_attenuation = 0.0
 transform = Transform3D(4.64, 0, 0, 0, 4.64, 0, 0, 0, 4.64, 0, 0, 0)
 amount = 1000
 lifetime = 5.0
+fixed_fps = 20
 process_material = SubResource("ParticleProcessMaterial_8t0ot")
 draw_pass_1 = SubResource("SphereMesh_whntf")
 
