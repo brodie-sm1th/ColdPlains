@@ -95,7 +95,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.0154743, 0)
 light_color = Color(0.7294118, 0.68235296, 1, 1)
 light_energy = 1.5
 shadow_enabled = true
-shadow_blur = 6.0
 omni_range = 55.0
 omni_attenuation = 0.0
 
